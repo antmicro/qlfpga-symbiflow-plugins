@@ -101,28 +101,6 @@
         <port name="Q" clock="C"/>
       </output_ports>
     </model>
-    <model name="dffsr" never_prune="true">
-      <input_ports>
-        <port name="D" clock="C"/>
-        <port name="C" is_clock="1"/>
-        <port name="S" clock="C"/>
-        <port name="R" clock="C"/>
-      </input_ports>
-      <output_ports>
-        <port name="Q" clock="C"/>
-      </output_ports>
-    </model>
-    <model name="dffnsr" never_prune="true">
-      <input_ports>
-        <port name="D" clock="C"/>
-        <port name="C" is_clock="1"/>
-        <port name="S" clock="C"/>
-        <port name="R" clock="C"/>
-      </input_ports>
-      <output_ports>
-        <port name="Q" clock="C"/>
-      </output_ports>
-    </model>
     <model name="sh_dff" never_prune="true">
       <input_ports>
         <port name="D" clock="C"/>
@@ -227,7 +205,7 @@
         <equivalent_sites>
           <site pb_type="clb"/>
         </equivalent_sites>
-        <input name="I" num_pins="24" equivalent="none"/>
+        <input name="I" num_pins="24" equivalent="full"/>
         <input name="reg_in" num_pins="1"/>
         <input name="sc_in" num_pins="1"/>
         <input name="cin" num_pins="1"/>
@@ -561,25 +539,17 @@ ff[1].Q : NULL</meta>
           </metadata>
         </pb_type>
         <interconnect>
+          <complete name="clks" input="io.clk" output="iopad.clk"/>
           <direct name="direct3" input="io.f2a_i" output="iopad.f2a_i"/>
           <direct name="direct4" input="iopad.a2f_o" output="io.a2f_o"/>
           <direct name="direct6" input="io.sc_in" output="iopad.sc_in"/>
           <direct name="direct7" input="iopad.sc_out" output="io.sc_out"/>
           <direct name="direct8" input="io.reset" output="iopad.reset"/>
-          <mux input="io.clk[0] io.clk[1] io.clk[2] io.clk[3]" name="clks_iopad.clk" output="iopad.clk">
-            <metadata>
-              <meta name="fasm_mux">
-io.clk[0] : mem_iopad_0_clk_0.mem_out[0],mem_iopad_0_clk_0.mem_out[1],mem_iopad_0_clk_0.mem_out[2]
-io.clk[1] : mem_iopad_0_clk_0.mem_out[1],mem_iopad_0_clk_0.mem_out[2]
-io.clk[2] : mem_iopad_0_clk_0.mem_out[2]
-io.clk[3] : mem_iopad_0_clk_0.mem_out[1]</meta>
-            </metadata>
-          </mux>
         </interconnect>
       </mode>
     </pb_type>
     <pb_type name="clb">
-      <input name="I" num_pins="24" equivalent="none"/>
+      <input name="I" num_pins="24" equivalent="full"/>
       <input name="reg_in" num_pins="1"/>
       <input name="sc_in" num_pins="1"/>
       <input name="cin" num_pins="1"/>
@@ -767,56 +737,6 @@ io.clk[3] : mem_iopad_0_clk_0.mem_out[1]</meta>
                   <direct input="ff.S" name="DFFNS-preset" output="DFFNS.S"/>
                 </interconnect>
               </mode>
-              <mode name="DFFSR">
-                <pb_type name="DFFSR" blif_model=".subckt dffsr" num_pb="1">
-                  <input name="D" num_pins="1"/>
-                  <input name="S" num_pins="1"/>
-                  <input name="R" num_pins="1"/>
-                  <output name="Q" num_pins="1"/>
-                  <clock name="C" num_pins="1"/>
-                  <T_setup value="5.2e-11" port="DFFSR.D" clock="C"/>
-                  <T_hold value="0.0" port="DFFSR.D" clock="C"/>
-                  <T_setup value="2e-11" port="DFFSR.S" clock="C"/>
-                  <T_hold value="7e-11" port="DFFSR.S" clock="C"/>
-                  <T_setup value="2e-11" port="DFFSR.R" clock="C"/>
-                  <T_hold value="7e-11" port="DFFSR.R" clock="C"/>
-                  <T_clock_to_Q max="8.4e-11" port="DFFSR.Q" clock="C"/>
-                </pb_type>
-                <interconnect>
-                  <direct input="DFFSR.Q" name="FF-Q" output="ff.Q"/>
-                  <direct input="ff.D" name="DFFSR-D" output="DFFSR.D">
-                    <pack_pattern name="LUT+DFFSR" in_port="ff.D" out_port="DFFSR.D"/>
-                  </direct>
-                  <direct input="ff.clk" name="DFFSR-clk" output="DFFSR.C"/>
-                  <direct input="ff.S" name="DFFSR-preset" output="DFFSR.S"/>
-                  <direct input="ff.R" name="DFFSR-reset" output="DFFSR.R"/>
-                </interconnect>
-              </mode>
-              <mode name="DFFNSR">
-                <pb_type name="DFFNSR" blif_model=".subckt dffnsr" num_pb="1">
-                  <input name="D" num_pins="1"/>
-                  <input name="S" num_pins="1"/>
-                  <input name="R" num_pins="1"/>
-                  <output name="Q" num_pins="1"/>
-                  <clock name="C" num_pins="1"/>
-                  <T_setup value="5.2e-11" port="DFFNSR.D" clock="C"/>
-                  <T_hold value="0.0" port="DFFNSR.D" clock="C"/>
-                  <T_setup value="2e-11" port="DFFNSR.S" clock="C"/>
-                  <T_hold value="7e-11" port="DFFNSR.S" clock="C"/>
-                  <T_setup value="2e-11" port="DFFNSR.R" clock="C"/>
-                  <T_hold value="7e-11" port="DFFNSR.R" clock="C"/>
-                  <T_clock_to_Q max="8.4e-11" port="DFFNSR.Q" clock="C"/>
-                </pb_type>
-                <interconnect>
-                  <direct input="DFFNSR.Q" name="FF-Q" output="ff.Q"/>
-                  <direct input="ff.D" name="DFFNSR-D" output="DFFNSR.D">
-                    <pack_pattern name="LUT+DFFNSR" in_port="ff.D" out_port="DFFNSR.D"/>
-                  </direct>
-                  <direct input="ff.clk" name="DFFNSR-clk" output="DFFNSR.C"/>
-                  <direct input="ff.S" name="DFFNSR-preset" output="DFFNSR.S"/>
-                  <direct input="ff.R" name="DFFNSR-reset" output="DFFNSR.R"/>
-                </interconnect>
-              </mode>
             </pb_type>
             <interconnect>
               <direct name="direct1" input="ble4.in" output="lut4[0:0].in"/>
@@ -828,8 +748,6 @@ io.clk[3] : mem_iopad_0_clk_0.mem_out[1]</meta>
                 <pack_pattern name="LUT+DFFNR" in_port="lut4.out" out_port="ff.D"/>
                 <pack_pattern name="LUT+DFFS" in_port="lut4.out" out_port="ff.D"/>
                 <pack_pattern name="LUT+DFFNS" in_port="lut4.out" out_port="ff.D"/>
-                <pack_pattern name="LUT+DFFSR" in_port="lut4.out" out_port="ff.D"/>
-                <pack_pattern name="LUT+DFFNSR" in_port="lut4.out" out_port="ff.D"/>
                 <delay_constant max="4.8e-11" min="4.6e-11" in_port="lut4.out" out_port="ff.D"/>
               </direct>
               <direct name="direct3" input="ble4.clk" output="ff.clk"/>
@@ -3423,7 +3341,7 @@ clb.clk[3] : mem_fle_7_clk_0.mem_out[1]</meta>
     </pb_type>
   </complexblocklist>
   <layout>
-    <fixed_layout height="26" name="qlf_k4n8-qlf_k4n8_umc22_slow" width="26">
+    <fixed_layout height="26" name="qlf_k4n8-qlf_k4n8_umc22" width="26">
       <single priority="10" type="io_left" x="0" y="1">
         <metadata>
           <meta name="fasm_prefix">fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__0 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__1 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__2 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__3 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__4 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__5 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__6 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__7 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__8 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__9 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__10 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__11 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__12 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__13 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__14 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__15</meta>
