@@ -1156,7 +1156,7 @@
     <!-- Define DSP48E1 end -->
   </complexblocklist>
   <layout>
-    <fixed_layout name="qlf_k6n10-qlf_k6n10_gf12" width="130" height="130">
+    <fixed_layout name="qlf_k6n10-qlf_k6n10_gf12_slow" width="130" height="130">
       <single type="io" x="0" y="1" priority="10">
         <metadata>
           <meta name="fasm_prefix">X0Y1</meta>
