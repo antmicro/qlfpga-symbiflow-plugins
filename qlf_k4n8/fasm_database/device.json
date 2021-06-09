@@ -125,6 +125,10 @@
       }
     ]
   },
+  "default_bitstream": {
+    "file": "default_bitstream.hex",
+    "format": "4byte"
+  },
   "tiles": [
     {
       "type": "io_bottom_bottom",
