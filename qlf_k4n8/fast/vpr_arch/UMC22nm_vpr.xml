@@ -269,7 +269,7 @@
   <switchlist>
     <switch type="mux" name="L1_mux" R="0." Cin=".77e-15" Cout="0." Tdel="7.9e-11" mux_trans_size="2.630740" buf_size="27.645901"/>
     <switch type="mux" name="L2_mux" R="0." Cin=".77e-15" Cout="0." Tdel="9.2e-11" mux_trans_size="2.630740" buf_size="27.645901"/>
-    <switch type="mux" name="L4_mux" R="0." Cin=".77e-15" Cout="0." Tdel="1.23e-10" mux_trans_size="2.630740" buf_size="27.645901"/>
+    <switch type="mux" name="L4_mux" R="0." Cin=".77e-15" Cout="0." Tdel="1.53e-10" mux_trans_size="2.630740" buf_size="27.645901"/>
     <switch type="mux" name="ipin_cblock" R="0." Cout="0." Cin="1.47e-15" Tdel="9.1e-11" mux_trans_size="1.222260" buf_size="auto"/>
   </switchlist>
   <segmentlist>
@@ -531,6 +531,9 @@
               <interconnect>
                 <direct input="pad.outpad" name="outpad_blif_to_outpad_pad" output="outpad.outpad"/>
               </interconnect>
+              <metadata>
+                <meta name="fasm_features">IO_QL_CCFF_mem.NOT_mem_out[0]</meta>
+              </metadata>
             </mode>
           </pb_type>
           <interconnect>
@@ -3427,7 +3430,7 @@ clb.clk[3] : mem_fle_7_clk_0.mem_out[1]</meta>
     </pb_type>
   </complexblocklist>
   <layout>
-    <fixed_layout height="26" name="qlf_k4n8-qlf_k4n8_umc22_fast" width="26">
+    <fixed_layout height="26" name="qlf_k4n8-qlf_k4n8_umc22_Fast" width="26">
       <single priority="10" type="io_left" x="0" y="1">
         <metadata>
           <meta name="fasm_prefix">fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__0 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__1 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__2 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__3 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__4 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__5 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__6 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__7 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__8 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__9 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__10 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__11 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__12 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__13 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__14 fpga_top.grid_io_left_left_0__1_.logical_tile_io_mode_io__15</meta>

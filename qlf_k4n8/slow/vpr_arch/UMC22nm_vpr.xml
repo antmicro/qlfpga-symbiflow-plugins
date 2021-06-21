@@ -531,6 +531,9 @@
               <interconnect>
                 <direct input="pad.outpad" name="outpad_blif_to_outpad_pad" output="outpad.outpad"/>
               </interconnect>
+              <metadata>
+                <meta name="fasm_features">IO_QL_CCFF_mem.NOT_mem_out[0]</meta>
+              </metadata>
             </mode>
           </pb_type>
           <interconnect>
