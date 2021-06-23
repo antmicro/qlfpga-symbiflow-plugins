@@ -362,6 +362,11 @@ def main():
         required=True,
         help="OpenFPGA arch.xml input"
     )
+    parser.add_argument(
+        "--dump-muxes",
+        action="store_true",
+        help="DEBUG - Dump mux graphs to graphviz .dot files"
+    )
 
     args = parser.parse_args()
 
@@ -399,7 +404,8 @@ def main():
     # Inject FASM annotation
     xml_arch = arch_fasm_injector.inject_fasm_annotation(
         xml_arch,
-        xml_openfpga_arch
+        xml_openfpga_arch,
+        dump_muxes = args.dump_muxes
     )
 
     # Fixup Physical IOs

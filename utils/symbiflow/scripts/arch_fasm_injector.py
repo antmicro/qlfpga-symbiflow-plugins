@@ -503,7 +503,7 @@ def annotate_leaf_pbtype(xml_pbtype, path, circuit_models, physical_annotations,
 #    append_metadata(xml_pbtype, "fasm_lut", feature)
 
 
-def annotate_interconnect(xml_conn, path, circuit_models, physical_annotations, suffix):
+def annotate_interconnect(xml_conn, path, circuit_models, physical_annotations, suffix, dump_muxes=False):
     """
     Annotates an interconnect with FASM featurees. The interconnect element
     must have a physical annotation and a circuit model associated.
@@ -567,6 +567,23 @@ def annotate_interconnect(xml_conn, path, circuit_models, physical_annotations, 
             add_const_input = circuit.add_const_input
         )
 
+        # DEBUG - Dump mux encoding and the graph
+        if dump_muxes:
+            fname = xml_conn.attrib["name"] + ".dot"
+            with open(fname, "w") as fp:
+                dot = mux_graph.dump_dot()
+                fp.write(dot)
+
+        # Print some info
+        print("  Circuit:'{}' type:'{}' width:{} levels:{} consts:{}".format(
+            circuit.name,
+            circuit.structure,
+            width,
+            circuit.num_levels,
+            circuit.add_const_input,
+        ))
+        print("  Encoding:")
+
         # Build a set of features for each input
         features = []
         for i, inp_name in enumerate(inp_names):
@@ -577,6 +594,11 @@ def annotate_interconnect(xml_conn, path, circuit_models, physical_annotations, 
             #    index += 1 # FIXME: Not sure if this is what OpenFPGA does
 
             encoding = mux_graph.get_input_encoding(index)
+            print("   {:2d}. {} {}".format(
+                index,
+                Graph.encoding_to_string(encoding),
+                inp_name
+            ))
 
             # Convert to a series of FASM features
             feature = []
@@ -632,7 +654,7 @@ def append_delays(xml_conn, inputs, output, delays):
 # =============================================================================
 
 
-def process_interconnect(xml_ic, path, physical_entities, circuit_models, physical_annotations, suffix):
+def process_interconnect(xml_ic, path, physical_entities, circuit_models, physical_annotations, suffix, dump_muxes=False):
     """
     Processes an interconnect. Checks each child connection tag if it requires
     FASM annotation and if one does invokes annotate_interconnect() for it.
@@ -728,10 +750,10 @@ def process_interconnect(xml_ic, path, physical_entities, circuit_models, physic
                 continue
 
             print(" Annotating <{}> interconnect '{}'".format(xml_conn.tag, name))
-            annotate_interconnect(xml_conn, ic_path, circuit_models, physical_annotations, suffix)
+            annotate_interconnect(xml_conn, ic_path, circuit_models, physical_annotations, suffix, dump_muxes)
 
 
-def process_pb_types(xml_arch, circuit_models, physical_entities, physical_annotations, config_protocol):
+def process_pb_types(xml_arch, circuit_models, physical_entities, physical_annotations, config_protocol, dump_muxes=False):
     """
     Recurisvely processes each root pb_type (complex block) in the architecture.
     For each root pb_type walks through its children and injects FASM prefixes
@@ -775,7 +797,7 @@ def process_pb_types(xml_arch, circuit_models, physical_entities, physical_annot
             # Process / annotate interconnects
             xml_ic = xml_mode.find("interconnect")
             if xml_ic is not None:
-                process_interconnect(xml_ic, curr_path, physical_entities, circuit_models, physical_annotations, suffix)
+                process_interconnect(xml_ic, curr_path, physical_entities, circuit_models, physical_annotations, suffix, dump_muxes)
 
             # Annotate child pb_types and/or recurse
             for xml_pb in xml_mode.findall("pb_type"):
@@ -810,7 +832,7 @@ def process_pb_types(xml_arch, circuit_models, physical_entities, physical_annot
 # =============================================================================
 
 
-def inject_fasm_annotation(xml_arch, xml_openfpga_arch):
+def inject_fasm_annotation(xml_arch, xml_openfpga_arch, dump_muxes=False):
     """
     Injects FASM metadata to complex blocks. Feature names are generated to be
     conformant to OpenFPGA bitstream features naming convention.
@@ -829,6 +851,6 @@ def inject_fasm_annotation(xml_arch, xml_openfpga_arch):
     physical_entities = identify_physical_entities(xml_arch, physical_modes)
 
     # Annotate physical modes
-    process_pb_types(xml_arch, circuit_models, physical_entities, physical_annotations, config_protocol)
+    process_pb_types(xml_arch, circuit_models, physical_entities, physical_annotations, config_protocol, dump_muxes)
 
     return xml_arch
