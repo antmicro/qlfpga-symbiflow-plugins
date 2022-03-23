@@ -365,6 +365,48 @@
                 <direct input="ff.clk" name="DFFN-clk" output="DFFN.C"/>
               </interconnect>
             </mode>
+            <mode name="DFFR">
+              <pb_type name="DFFR" blif_model=".subckt dffr" num_pb="1">
+                <input name="D" num_pins="1"/>
+                <input name="R" num_pins="1"/>
+                <output name="Q" num_pins="1"/>
+                <clock name="C" num_pins="1"/>
+                <T_setup value="2.6e-11" port="DFFR.D" clock="C"/>
+                <T_hold value="4e-12" port="DFFR.D" clock="C"/>
+                <T_setup value="6e-12" port="DFFR.R" clock="C"/>
+                <T_hold value="2.5e-11" port="DFFR.R" clock="C"/>
+                <T_clock_to_Q max="2.2e-11" port="DFFR.Q" clock="C"/>
+              </pb_type>
+              <interconnect>
+                <direct input="DFFR.Q" name="FF-Q" output="ff.Q"/>
+                <direct input="ff.D" name="DFFR-D" output="DFFR.D">
+                  <pack_pattern name="pack-OREGR" in_port="ff.D" out_port="DFFR.D"/>
+                </direct>
+                <direct input="ff.clk" name="DFFR-clk" output="DFFR.C"/>
+                <direct input="ff.R" name="DFFR-reset" output="DFFR.R"/>
+              </interconnect>
+            </mode>
+            <mode name="DFFNR">
+              <pb_type name="DFFNR" blif_model=".subckt dffnr" num_pb="1">
+                <input name="D" num_pins="1"/>
+                <input name="R" num_pins="1"/>
+                <output name="Q" num_pins="1"/>
+                <clock name="C" num_pins="1"/>
+                <T_setup value="2.6e-11" port="DFFNR.D" clock="C"/>
+                <T_hold value="4e-12" port="DFFNR.D" clock="C"/>
+                <T_setup value="6e-12" port="DFFNR.R" clock="C"/>
+                <T_hold value="2.5e-11" port="DFFNR.R" clock="C"/>
+                <T_clock_to_Q max="2.2e-11" port="DFFNR.Q" clock="C"/>
+              </pb_type>
+              <interconnect>
+                <direct input="DFFNR.Q" name="FF-Q" output="ff.Q"/>
+                <direct input="ff.D" name="DFFNR-D" output="DFFNR.D">
+                  <pack_pattern name="pack-OREGNR" in_port="ff.D" out_port="DFFNR.D"/>
+                </direct>
+                <direct input="ff.clk" name="DFFNR-clk" output="DFFNR.C"/>
+                <direct input="ff.R" name="DFFNR-reset" output="DFFNR.R"/>
+              </interconnect>
+            </mode>
           </pb_type>
           <pb_type name="outpad" blif_model=".output" num_pb="1">
             <input name="outpad" num_pins="1"/>
@@ -377,6 +419,8 @@
               <pack_pattern name="pack-OLATCH" in_port="ff.Q" out_port="outpad.outpad"/>
               <pack_pattern name="pack-OREG" in_port="ff.Q" out_port="outpad.outpad"/>
               <pack_pattern name="pack-OREGN" in_port="ff.Q" out_port="outpad.outpad"/>
+              <pack_pattern name="pack-OREGR" in_port="ff.Q" out_port="outpad.outpad"/>
+              <pack_pattern name="pack-OREGNR" in_port="ff.Q" out_port="outpad.outpad"/>
               <delay_constant max="1.03e-10" min="5.2e-11" in_port="io_output.f2a_i" out_port="outpad.outpad"/>
               <delay_constant max="1.04e-10" min="5.8e-11" in_port="ff.Q" out_port="outpad.outpad"/>
             </mux>
@@ -457,6 +501,48 @@
                 <direct input="ff.clk" name="DFFN-clk" output="DFFN.C"/>
               </interconnect>
             </mode>
+            <mode name="DFFR">
+              <pb_type name="DFFR" blif_model=".subckt dffr" num_pb="1">
+                <input name="D" num_pins="1"/>
+                <input name="R" num_pins="1"/>
+                <output name="Q" num_pins="1"/>
+                <clock name="C" num_pins="1"/>
+                <T_setup value="2.6e-11" port="DFFR.D" clock="C"/>
+                <T_hold value="4e-12" port="DFFR.D" clock="C"/>
+                <T_setup value="6e-12" port="DFFR.R" clock="C"/>
+                <T_hold value="2.5e-11" port="DFFR.R" clock="C"/>
+                <T_clock_to_Q max="2.5e-11" port="DFFR.Q" clock="C"/>
+              </pb_type>
+              <interconnect>
+                <direct input="DFFR.Q" name="FF-Q" output="ff.Q"/>
+                <direct input="ff.D" name="DFFR-D" output="DFFR.D">
+                  <pack_pattern name="pack-IREGR" in_port="ff.D" out_port="DFFR.D"/>
+                </direct>
+                <direct input="ff.clk" name="DFFR-clk" output="DFFR.C"/>
+                <direct input="ff.R" name="DFFR-reset" output="DFFR.R"/>
+              </interconnect>
+            </mode>
+            <mode name="DFFNR">
+              <pb_type name="DFFNR" blif_model=".subckt dffnr" num_pb="1">
+                <input name="D" num_pins="1"/>
+                <input name="R" num_pins="1"/>
+                <output name="Q" num_pins="1"/>
+                <clock name="C" num_pins="1"/>
+                <T_setup value="2.6e-11" port="DFFNR.D" clock="C"/>
+                <T_hold value="4e-12" port="DFFNR.D" clock="C"/>
+                <T_setup value="6e-12" port="DFFNR.R" clock="C"/>
+                <T_hold value="2.5e-11" port="DFFNR.R" clock="C"/>
+                <T_clock_to_Q max="2.5e-11" port="DFFNR.Q" clock="C"/>
+              </pb_type>
+              <interconnect>
+                <direct input="DFFNR.Q" name="FF-Q" output="ff.Q"/>
+                <direct input="ff.D" name="DFFNR-D" output="DFFNR.D">
+                  <pack_pattern name="pack-IREGNR" in_port="ff.D" out_port="DFFNR.D"/>
+                </direct>
+                <direct input="ff.clk" name="DFFNR-clk" output="DFFNR.C"/>
+                <direct input="ff.R" name="DFFNR-reset" output="DFFNR.R"/>
+              </interconnect>
+            </mode>
           </pb_type>
           <interconnect>
             <direct name="ff-clk" input="io_input.clk" output="ff.clk"/>
@@ -466,6 +552,8 @@
               <pack_pattern name="pack-ILATCH" in_port="inpad.inpad" out_port="ff.D"/>
               <pack_pattern name="pack-IREG" in_port="inpad.inpad" out_port="ff.D"/>
               <pack_pattern name="pack-IREGN" in_port="inpad.inpad" out_port="ff.D"/>
+              <pack_pattern name="pack-IREGR" in_port="inpad.inpad" out_port="ff.D"/>
+              <pack_pattern name="pack-IREGNR" in_port="inpad.inpad" out_port="ff.D"/>
             </direct>
             <mux name="mux2" input="inpad.inpad ff.Q" output="io_input.a2f_o">
               <delay_constant max="9.5e-11" min="5.9e-11" in_port="inpad.inpad" out_port="io_input.a2f_o"/>

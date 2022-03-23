@@ -55,6 +55,32 @@
       }
     },
     {
+      "src_pbtype": "io[io_input].io_input.ff[DFFR].DFFR",
+      "dst_pbtype": "io[physical].iopad.ff",
+      "index_map": [
+        1,
+        0
+      ],
+      "mode_bits": "1",
+      "port_map": {
+        "C": "clk",
+        "R": "reset"
+      }
+    },
+    {
+      "src_pbtype": "io[io_input].io_input.ff[DFFNR].DFFNR",
+      "dst_pbtype": "io[physical].iopad.ff",
+      "index_map": [
+        1,
+        0
+      ],
+      "mode_bits": "0",
+      "port_map": {
+        "C": "clk",
+        "R": "reset"
+      }
+    },
+    {
       "src_pbtype": "io[io_output].io_output.ff[LATCH].LATCH",
       "dst_pbtype": "io[physical].iopad.ff",
       "index_map": [
@@ -86,6 +112,32 @@
       "mode_bits": "0",
       "port_map": {
         "C": "clk"
+      }
+    },
+    {
+      "src_pbtype": "io[io_output].io_output.ff[DFFR].DFFR",
+      "dst_pbtype": "io[physical].iopad.ff",
+      "index_map": [
+        1,
+        0
+      ],
+      "mode_bits": "1",
+      "port_map": {
+        "C": "clk",
+        "R": "reset"
+      }
+    },
+    {
+      "src_pbtype": "io[io_output].io_output.ff[DFFNR].DFFNR",
+      "dst_pbtype": "io[physical].iopad.ff",
+      "index_map": [
+        1,
+        0
+      ],
+      "mode_bits": "0",
+      "port_map": {
+        "C": "clk",
+        "R": "reset"
       }
     },
     {

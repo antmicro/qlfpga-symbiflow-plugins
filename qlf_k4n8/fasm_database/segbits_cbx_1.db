@@ -50,15 +50,3 @@ mem_top_ipin_12.mem_out[0] 48
 mem_top_ipin_12.mem_out[1] 49
 mem_top_ipin_12.mem_out[2] 50
 mem_top_ipin_12.mem_out[3] 51
-mem_top_ipin_13.mem_out[0] 52
-mem_top_ipin_13.mem_out[1] 53
-mem_top_ipin_13.mem_out[2] 54
-mem_top_ipin_13.mem_out[3] 55
-mem_top_ipin_14.mem_out[0] 56
-mem_top_ipin_14.mem_out[1] 57
-mem_top_ipin_14.mem_out[2] 58
-mem_top_ipin_14.mem_out[3] 59
-mem_top_ipin_15.mem_out[0] 60
-mem_top_ipin_15.mem_out[1] 61
-mem_top_ipin_15.mem_out[2] 62
-mem_top_ipin_15.mem_out[3] 63
