@@ -34,13 +34,13 @@ def make_segbit_sets(bits_by_loc):
     for loc in bits_by_loc.keys():
         bits_by_loc[loc] = sorted(bits_by_loc[loc], key=lambda bit: bit[2])
 
-    locs = set(bits_by_loc.keys())
+    locs = sorted(list(bits_by_loc.keys()))
     segbit_sets = []
 
     while locs:
 
         # Pick a seed tile to be used for segbit pattern
-        seed_loc = next(iter(locs))
+        seed_loc = locs[0]
         seed_bits = bits_by_loc[seed_loc]
 
         # Find bit offset of the seed tile
@@ -50,7 +50,7 @@ def make_segbit_sets(bits_by_loc):
         # Verify the segbits pattern against all tiles in the grid that do
         # not have segbits assigned yet
         offsets = {}
-        for loc in set(locs):
+        for loc in locs:
             bits = bits_by_loc[loc]
 
             # Compute offset and segbits
@@ -69,7 +69,7 @@ def make_segbit_sets(bits_by_loc):
         assert offsets
 
         # Remove the locations with assigned segbits and add a new segbit set
-        locs -= set(offsets.keys())
+        locs = [loc for loc in locs if loc not in offsets]
 
         # Make the segbit set
         segbit_sets.append((seed_segbits, offsets))
