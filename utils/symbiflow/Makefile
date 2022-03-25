@@ -87,7 +87,10 @@ $(BUILD_PATH)/fasm_database: $(OPENFPGA_FABRIC_BITSTREAM) | $(BUILD_PATH)
 	$(PYTHON) scripts/fasm_database_builder.py \
 		--fabric-bitstream $< \
 		-o $@ \
-		--log-level DEBUG
+		--log-level DEBUG || (rm -rf $@ && false)
+	$(PYTHON) scripts/make_default_bitstream.py \
+		--db-root $@ \
+		--log-level DEBUG || (rm -rf $@ && false)
 
 all: $(BUILD_PATH)/arch.final.xml $(BUILD_PATH)/rr_graph.final.$(GRAPH_EXT).gz $(BUILD_PATH)/repacking_rules.json $(BUILD_PATH)/fasm_database
 
