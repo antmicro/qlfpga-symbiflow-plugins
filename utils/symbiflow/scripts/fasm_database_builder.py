@@ -342,7 +342,7 @@ def main():
     # Write device data
     fname = os.path.join(args.output_dir, "device.json")
     with open(fname, "w") as fp:
-        json.dump(device, fp, indent=2)
+        json.dump(device, fp, indent=2, sort_keys=True)
 
     logging.info("Done.")
 

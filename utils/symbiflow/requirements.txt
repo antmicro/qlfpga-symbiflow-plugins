@@ -2,3 +2,4 @@ lxml==4.3.2
 pycapnp==1.0.0
 progressbar2==3.53.1
 -e git+https://github.com/SymbiFlow/symbiflow-rr-graph@ce4901f78237325aeffaa4ea5d5af7d4f7049c2f#egg=rr_graph
+-e git+https://github.com/QuickLogic-Corp/ql_fasm@master#egg=qlf_fasm
