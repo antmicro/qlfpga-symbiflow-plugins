@@ -101,7 +101,7 @@ def parse_fabric_bitstream(xml_root):
 
             # FIXME: For now only "scan_chain" configuration is supported. Check
             # if the bitstream conforms to that
-            assert not xml_bit.find("wl") and not xml_bit.find("bl") \
+            assert xml_bit.find("wl") is not None and xml_bit.find("bl") is not None \
                    and not xml_bit.find("frame"), "Only \"scan_chain\" configuration is supported"
 
             # Get bit info
