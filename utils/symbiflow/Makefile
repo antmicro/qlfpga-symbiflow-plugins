@@ -6,12 +6,15 @@ ifeq ($(OPENFPGA_TASK_PATH),)
 $(error ERROR: The variable OPENFPGA_TASK_PATH has to be specified)
 endif
 
+# Device process
+PROCESS_PREFIX ?= UMC22nm_
+
 # Input OpenFPGA files
-OPENFPGA_VPR_ARCH = $(abspath $(OPENFPGA_TASK_PATH)//latest/UMC22nm_vpr/top/MIN_ROUTE_CHAN_WIDTH/arch/UMC22nm_vpr.xml)
-OPENFPGA_ARCH = $(abspath $(OPENFPGA_TASK_PATH)/arch/UMC22nm_openfpga.xml)
+OPENFPGA_VPR_ARCH = $(abspath $(OPENFPGA_TASK_PATH)/latest/$(PROCESS_PREFIX)vpr/top/MIN_ROUTE_CHAN_WIDTH/arch/$(PROCESS_PREFIX)vpr.xml)
+OPENFPGA_ARCH = $(abspath $(OPENFPGA_TASK_PATH)/arch/$(PROCESS_PREFIX)openfpga.xml)
 OPENFPGA_RR_GRAPH = $(abspath $(OPENFPGA_TASK_PATH)/../rr_data/rr_graph.openfpga.xml.obj)
 OPENFPGA_GSB_PATH = $(abspath $(OPENFPGA_TASK_PATH)/../rr_data/gsb)
-OPENFPGA_FABRIC_BITSTREAM = $(abspath $(OPENFPGA_TASK_PATH)/../fabric_bitstream.xml)
+OPENFPGA_FABRIC_BITSTREAM = $(abspath $(shell find $(OPENFPGA_TASK_PATH)/../ -name fabric_bitstream.xml))
 
 # Device layout to use
 LAYOUT ?= 32x32
