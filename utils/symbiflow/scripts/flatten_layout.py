@@ -63,6 +63,8 @@ class GridLocSpec:
         ("endy", "H-1"),
         ("incrx", "w"),
         ("incry", "h"),
+        ("repeatx", "0"),
+        ("repeaty", "0"),
     )
 
     def __init__(self, xml_elem, tile_types):
@@ -136,22 +138,38 @@ class GridLocSpec:
         # "row"
         elif xml_elem.tag == "row":
 
-            # TODO: Support incry
-            assert "incry" not in xml_elem.attrib, "'incry' not supported"
+            # TODO: Support incrx
+            assert "incrx" not in xml_elem.attrib, "'incrx' not supported"
+
+            if params["repeaty"] > 0:
+                ys = [y for y in range(params["starty"], grid_h, params["repeaty"])]
+            else:
+                ys = [params["starty"]]
 
             self.locs = set([
-                (x, params["starty"],) for x in range(params["startx"], grid_w)
-            ])
+                (x, y,) for x, y in itertools.product(
+                    range(params["startx"], grid_w, self.tile_w - self.tile_w + 1),
+                    ys,
+                )]
+            )
 
         # "col"
         elif xml_elem.tag == "col":
 
-            # TODO: Support incrx
-            assert "incrx" not in xml_elem.attrib, "'incrx' not supported"
+            # TODO: Support incry
+            assert "incry" not in xml_elem.attrib, "'incry' not supported"
+
+            if params["repeatx"] > 0:
+                xs = [x for x in range(params["startx"], grid_w, params["repeatx"])]
+            else:
+                xs = [params["startx"]]
 
             self.locs = set([
-                (params["startx"], y) for y in range(params["starty"], grid_h)
-            ])
+                (x, y) for x, y in itertools.product(
+                    xs,
+                    range(params["starty"], grid_h - self.tile_h + 1, self.tile_h)
+                )]
+            )
 
         # "single"
         elif xml_elem.tag == "single":

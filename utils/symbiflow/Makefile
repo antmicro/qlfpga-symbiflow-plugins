@@ -6,12 +6,15 @@ ifeq ($(OPENFPGA_TASK_PATH),)
 $(error ERROR: The variable OPENFPGA_TASK_PATH has to be specified)
 endif
 
+# Device process
+PROCESS_PREFIX ?= UMC22nm_
+
 # Input OpenFPGA files
-OPENFPGA_VPR_ARCH = $(abspath $(OPENFPGA_TASK_PATH)//latest/UMC22nm_vpr/top/MIN_ROUTE_CHAN_WIDTH/arch/UMC22nm_vpr.xml)
-OPENFPGA_ARCH = $(abspath $(OPENFPGA_TASK_PATH)/arch/UMC22nm_openfpga.xml)
+OPENFPGA_VPR_ARCH = $(abspath $(OPENFPGA_TASK_PATH)/latest/$(PROCESS_PREFIX)vpr/top/MIN_ROUTE_CHAN_WIDTH/arch/$(PROCESS_PREFIX)vpr.xml)
+OPENFPGA_ARCH = $(abspath $(OPENFPGA_TASK_PATH)/arch/$(PROCESS_PREFIX)openfpga.xml)
 OPENFPGA_RR_GRAPH = $(abspath $(OPENFPGA_TASK_PATH)/../rr_data/rr_graph.openfpga.xml.obj)
 OPENFPGA_GSB_PATH = $(abspath $(OPENFPGA_TASK_PATH)/../rr_data/gsb)
-OPENFPGA_FABRIC_BITSTREAM = $(abspath $(OPENFPGA_TASK_PATH)/../fabric_bitstream.xml)
+OPENFPGA_FABRIC_BITSTREAM = $(abspath $(shell find $(OPENFPGA_TASK_PATH)/../ -name fabric_bitstream.xml))
 
 # Device layout to use
 LAYOUT ?= 32x32
@@ -88,9 +91,11 @@ $(BUILD_PATH)/fasm_database: $(OPENFPGA_FABRIC_BITSTREAM) | $(BUILD_PATH)
 		--fabric-bitstream $< \
 		-o $@ \
 		--log-level DEBUG || (rm -rf $@ && false)
+ifndef NO_DEFAULT_BITSTREAM
 	$(PYTHON) scripts/make_default_bitstream.py \
 		--db-root $@ \
 		--log-level DEBUG || (rm -rf $@ && false)
+endif
 
 all: $(BUILD_PATH)/arch.final.xml $(BUILD_PATH)/rr_graph.final.$(GRAPH_EXT).gz $(BUILD_PATH)/repacking_rules.json $(BUILD_PATH)/fasm_database
 

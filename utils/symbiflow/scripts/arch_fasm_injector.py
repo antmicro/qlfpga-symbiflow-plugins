@@ -414,9 +414,10 @@ def annotate_leaf_pbtype(xml_pbtype, path, circuit_models, physical_annotations,
 
     # Check if mode bit count from physical pb_type annotation matches the
     # count from the circuit model.
-    mode_bits = (len(annotation.mode_bits) - 1).bit_length()
-    assert mode_bits == circuit.mode_bits, \
-        (circuit.name, circuit.mode_bits, annotation.mode_bits)
+    for mode_bits in annotation.mode_bits:
+        len_mode_bits = len(mode_bits)
+        assert len_mode_bits == circuit.mode_bits, \
+            (circuit.name, circuit.mode_bits, annotation.mode_bits, mode_bits)
 
     # This is a lut
     if circuit.type == "lut":
@@ -616,18 +617,24 @@ def append_delays(xml_conn, inputs, output, delays):
         if generic_in_port not in delays:
             continue
 
-        max, min, out_port = delays[generic_in_port]
+        max_delay, min_delay, out_port = delays[generic_in_port]
 
         assert out_port == generic_out_port, (output, generic_out_port, delays)
 
+        if max_delay is None and min_delay is not None:
+            max_delay = min_delay
+        if max_delay is not None and min_delay is None:
+            min_delay = max_delay
+
+        if max_delay is None and min_delay is None:
+            continue
+
         ET.SubElement(xml_conn, "delay_constant", {
-            "max": max,
-            "min": min,
+            "max": max_delay,
+            "min": min_delay,
             "in_port": in_port,
             "out_port": output
         })
-
-
 
 # =============================================================================
 
@@ -659,8 +666,8 @@ def process_interconnect(xml_ic, path, physical_entities, circuit_models, physic
             delays = dict()
             for delay in xml_conn.findall(".//delay_constant"):
                 attrs = delay.attrib
-                max_delay = attrs["max"]
-                min_delay = attrs["min"]
+                max_delay = attrs.get("max", None)
+                min_delay = attrs.get("min", None)
                 out_port = attrs["out_port"]
                 in_port = attrs["in_port"]
 

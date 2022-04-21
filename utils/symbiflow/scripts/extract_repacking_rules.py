@@ -32,6 +32,15 @@ def load_repacking_rules(xml_root):
         else:
             return dst_pbtype
 
+    def parse_index(s):
+        """
+        Tries to parse a string as integer and if it fails retries as float
+        """
+        try:
+            return int(s)
+        except ValueError:
+            return float(s)
+
     # Get "pb_type_annotation"
     xml_rules = xml_root.find("pb_type_annotations")
     assert xml_rules is not None
@@ -45,8 +54,8 @@ def load_repacking_rules(xml_root):
 
             # Index map - linear function (ax + b) where index_map = (a, b)
             index_map = (
-                int(xml_rule.get("physical_pb_type_index_factor", "1")),
-                int(xml_rule.get("physical_pb_type_index_offset", "0")),
+                parse_index(xml_rule.get("physical_pb_type_index_factor", "1")),
+                parse_index(xml_rule.get("physical_pb_type_index_offset", "0")),
             )
 
             # Mode bits
