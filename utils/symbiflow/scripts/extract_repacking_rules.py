@@ -64,9 +64,13 @@ def load_repacking_rules(xml_root):
             # Get port map
             port_map = {}
             for xml_port in xml_rule.findall("port"):
-                src = xml_port.attrib["name"]
-                dst = xml_port.attrib["physical_mode_port"]
-                port_map[src] = dst
+                port = xml_port.attrib["name"]
+
+                port_map[port] = dict()
+                for key, value in xml_port.attrib.items():
+                    if key.startswith("physical_mode_"):
+                        key = key.replace("physical_mode_", "")
+                        port_map[port][key] = value
 
             src_pbtype = xml_rule.attrib["name"]
             dst_pbtype = xml_rule.attrib["physical_pb_type_name"]
