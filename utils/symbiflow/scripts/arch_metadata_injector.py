@@ -1,13 +1,15 @@
 #!/usr/bin/env Python3
 """
 This script contains method for patchin VPR arch.xml in order to include
-FASM metadata compatible with OpenFPGA bistream entities naming scheme.
+pb_type medatata which mostly include FASM annotations compatible with
+OpenFPGA bistream entities naming scheme.
 """
 import re
+import json
 
 import lxml.etree as ET
 
-from openfpga_arch_utils import CircuitModel, MuxCircuitModel
+from openfpga_arch_utils import CircuitModel, MuxCircuitModel, LutCircuitModel
 from openfpga_arch_utils import load_circuit_models
 
 from vpr_arch_utils import is_leaf_pbtype
@@ -437,6 +439,13 @@ def annotate_leaf_pbtype(xml_pbtype, path, circuit_models, physical_annotations,
 
         mem_offset += size
 
+        # Append metadata describing the LUT and its ports
+        assert isinstance(circuit, LutCircuitModel), type(circuit)
+        append_metadata(xml_pbtype, "class", "lut")
+
+        port_data = {p: {k: v for k, v in a.items() if k != "size"} for p, a in circuit.ports.items()}
+        append_metadata(xml_pbtype, "lut_ports", json.dumps(port_data, sort_keys=True))
+
     # We have a single mode bit possibility, emit a feature
     if len(annotation.mode_bits) == 1:
         mode_bit = next(iter(annotation.mode_bits))
@@ -477,31 +486,6 @@ def annotate_leaf_pbtype(xml_pbtype, path, circuit_models, physical_annotations,
         append_metadata(xml_pbtype, "fasm_params", fasm_params)
 
         mem_offset += size
-
-#def annotate_native_lut(xml_pbtype):
-#    """
-#    Appends FASM annotation of native LUT (.names)
-#    """
-#
-#    # Determine LUT size
-#    for xml_inp in xml_pbtype.findall("input"):
-#        if xml_inp.get("port_class", None) == "lut_in":
-#            width = int(xml_inp.attrib["num_pins"])
-#            break
-#    else:
-#        print("ERROR: Cannot determine LUT size of '{}'".format(xml_pbtype.attrib["name"]))
-#        return
-#
-#    # Format FASM feature name
-#
-#    # FIXME: The DFF prefix should probably be read from somewhere instead of
-#    # being hard-coded here.
-#    feature = "lut{}_DFF_mem.mem_out[{}:0]".format(width, (1 << width) - 1)
-#
-#    # FASM type
-#    append_metadata(xml_pbtype, "fasm_type", "LUT")
-#    # FASM LUT
-#    append_metadata(xml_pbtype, "fasm_lut", feature)
 
 
 def annotate_interconnect(xml_conn, path, circuit_models, physical_annotations, suffix):
@@ -560,7 +544,7 @@ def annotate_interconnect(xml_conn, path, circuit_models, physical_annotations, 
         width = len(inp_names)
 
         # Build the mux graph
-        assert isinstance(circuit, MuxCircuitModel)
+        assert isinstance(circuit, MuxCircuitModel), type(circuit)
         mux_graph = Graph.build(
             num_inputs = width,
             impl_structure = circuit.structure,
@@ -817,9 +801,9 @@ def process_pb_types(xml_arch, circuit_models, physical_entities, physical_annot
 # =============================================================================
 
 
-def inject_fasm_annotation(xml_arch, xml_openfpga_arch):
+def inject_metadata(xml_arch, xml_openfpga_arch):
     """
-    Injects FASM metadata to complex blocks. Feature names are generated to be
+    Injects metadata to complex blocks. FASM feature names are generated to be
     conformant to OpenFPGA bitstream features naming convention.
     """
 

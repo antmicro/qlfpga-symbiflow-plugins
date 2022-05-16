@@ -11,7 +11,7 @@ import sys
 
 import lxml.etree as ET
 
-import arch_fasm_injector
+import arch_metadata_injector
 
 # =============================================================================
 
@@ -396,8 +396,8 @@ def main():
     if args.pick_layout:
         pick_layout(xml_arch, args.pick_layout, args.corner)
 
-    # Inject FASM annotation
-    xml_arch = arch_fasm_injector.inject_fasm_annotation(
+    # Inject metadata
+    xml_arch = arch_metadata_injector.inject_metadata(
         xml_arch,
         xml_openfpga_arch
     )

@@ -57,6 +57,33 @@ class MuxCircuitModel(CircuitModel):
     def __repr__(self):
         return str(self)
 
+
+class LutCircuitModel(CircuitModel):
+    """
+    Subclass for representing LUT subcircuits. Stores information about ports
+    and fracturing.
+    """
+
+    def __init__(self, type, name, ports):
+        assert type == "lut"
+        super().__init__(type, name)
+
+        self.ports = ports
+
+    def __str__(self):
+        string = super().__str__() + " "
+        for port, attrib in self.ports.items():
+            string += "port={}[{}:0] {} ".format(
+                port,
+                attrib["size"],
+                {k:v for k, v in attrib.items() if k != "size"},
+            )
+
+        return string
+
+    def __repr__(self):
+        return str(self)
+
 # =============================================================================
 
 
@@ -83,6 +110,7 @@ def load_circuit_models(xml_root):
         type = xml_circuit.attrib["type"]
         name = xml_circuit.attrib["name"]
 
+        # We have a mux
         if type == "mux":
 
             tech = xml_tech.get("type", None)
@@ -105,6 +133,28 @@ def load_circuit_models(xml_root):
                 add_const_input
             )
 
+        # We have a LUT
+        elif type == "lut":
+
+            PORT_ATTRIB = {"type", "size", "lut_frac_level", "lut_output_mask"}
+
+            ports = {}
+            for xml_tag in xml_circuit.findall("port"):
+
+                if xml_tag.attrib["type"] not in ["input", "output"]:
+                    continue
+
+                key = xml_tag.attrib["prefix"]
+                val = {k: v for k, v in xml_tag.attrib.items() if k in PORT_ATTRIB}
+                ports[key] = val
+
+            circuit_models[name] = LutCircuitModel(
+                type,
+                name,
+                ports
+            )
+
+        # We have something else
         else:
             circuit_models[name] = CircuitModel(type, name)
 
