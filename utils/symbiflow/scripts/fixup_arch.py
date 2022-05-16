@@ -362,6 +362,11 @@ def main():
         required=True,
         help="OpenFPGA arch.xml input"
     )
+    parser.add_argument(
+        "--enable-all-modes",
+        action="store_true",
+        help="Enable VPR packing for all physical modes"
+    )
 
     args = parser.parse_args()
 
@@ -387,7 +392,8 @@ def main():
     fixup_tiles(xml_arch)
 
     # Fixup non-packable modes
-    make_all_modes_packable(xml_arch)
+    if args.enable_all_modes:
+        make_all_modes_packable(xml_arch)
 
     # Fixup OpenFPGA specific attributes
     fixup_attributes(xml_arch)
